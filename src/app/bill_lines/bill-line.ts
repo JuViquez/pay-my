@@ -4,4 +4,6 @@ export class BillLine {
     quantity: number;
     price: number;
     bill_id: string;
+    total: number;
+    state: string
 }

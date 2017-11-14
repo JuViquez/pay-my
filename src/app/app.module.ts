@@ -6,12 +6,16 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { AgmCoreModule } from '@agm/core';
 import { UserListComponent } from './users/user-list/user-list.component';
+import { CurrentBillComponent } from './bills/current-bill/current-bill.component';
+import { BillLineListComponent } from './bill_lines/bill-line-list/bill-line-list.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    UserListComponent
+    UserListComponent,
+    CurrentBillComponent,
+    BillLineListComponent
   ],
   imports: [
     BrowserModule,
