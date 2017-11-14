@@ -2,14 +2,19 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
+var config = require("./config")
 
 var USERS_COLLECTION = "users";
 var BUSINESS_COLLECTION = "business";
 var BILLS_COLLECTION = "bills";
 var BILL_LINES_COLLECTION = "bill_lines"
 
+
 var app = express();
 app.use(bodyParser.json());
+
+var distDir = __dirname + "/dist/";
+app.use(express.static(distDir));
 
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
@@ -26,7 +31,7 @@ mongodb.MongoClient.connect(config.connectionString, function (err, database) {
   console.log("Database connection ready");
 
   // Initialize the app.
-  var server = app.listen(process.env.PORT || 8080, function () {
+  var server = app.listen(8080, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
   });
