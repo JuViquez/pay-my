@@ -60,7 +60,7 @@ app.get("/api/users", function(req, res) {
 });
 
 /*  "/api/business"
- *    GET: finds all users
+ *    GET: finds all business
  */
 
 app.get("/api/business", function(req, res) {

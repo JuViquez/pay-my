@@ -1,30 +1,15 @@
-<<<<<<< HEAD
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-
-@Component({
-  selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css'],
-  encapsulation: ViewEncapsulation.None
-})
-export class MapComponent implements OnInit {
-
-  constructor() { }
-
-  ngOnInit() {
-  }
-
-}
-=======
 import { Component, OnInit, ElementRef, NgZone, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { } from 'googlemaps';
 import { MapsAPILoader } from '@agm/core';
+import { BusinessService } from '../business.service';
+import { Business } from '../business';
 
 @Component({
   selector: 'map',
   templateUrl: './map.component.html',
-  styleUrls: ['./map.component.css']
+  styleUrls: ['./map.component.css'],
+  providers: [BusinessService]
 })
 
 export class MapComponent implements OnInit {
@@ -34,10 +19,7 @@ export class MapComponent implements OnInit {
   public zoom: number;
   public searchControl: FormControl;
 
-  public markers = {
-    lat: 9.9350963,
-    lng: -84.1043763
-  }
+  business: Business[];
 
   @ViewChild("search")
   public searchElementRef: ElementRef;
@@ -47,10 +29,19 @@ export class MapComponent implements OnInit {
 
   constructor(
     private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private businessService: BusinessService
   ) { }
 
+  
+
   ngOnInit() {
+
+    this.businessService
+    .getBusiness()
+    .then((Business: Business[]) => { 
+     this.business = Business;
+   })
     // Create search FormControl
     this.searchControl = new FormControl();
 
@@ -90,4 +81,3 @@ export class MapComponent implements OnInit {
   }
 
 } // Close MapComponent
->>>>>>> pay-my/ace-branch
