@@ -1,25 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Business } from './business';
+import { User } from './user';
 import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 @Injectable()
-export class BusinessService {
+export class UserService {
 
-  private businessUrl = 'api/business';
+  private usersUrl = 'api/users';
+
   constructor(private http: Http) { }
 
-  getBusiness(): Promise<void | Business[]> {
-    return this.http.get(this.businessUrl)
+  getUsers(): Promise<void | User[]> {
+    return this.http.get(this.usersUrl)
                .toPromise()
-               .then(response => response.json() as Business[])
+               .then(response => response.json() as User[])
                .catch(this.handleError);
   }
+
 
   private handleError (error: any) {
     let errMsg = (error.message) ? error.message :
     error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg); 
   }
-
 }
