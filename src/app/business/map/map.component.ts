@@ -15,6 +15,7 @@ export class MapComponent implements OnInit {
   public lng: number;
   public zoom: number;
   public searchControl: FormControl;
+  public imgurl: string;
 
   public markers = {
     lat: 9.9350963,
