@@ -2,7 +2,8 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var mongodb = require("mongodb");
 var ObjectID = mongodb.ObjectID;
-var config = require("./config")
+var config = require("./config");
+var path = require('path');
 
 var USERS_COLLECTION = "users";
 var BUSINESS_COLLECTION = "business";
@@ -11,11 +12,15 @@ var BILL_LINES_COLLECTION = "bill_lines"
 
 
 var app = express();
+var distDir = path.join(__dirname, "/dist");
+
 app.use(bodyParser.json());
 
-var distDir = __dirname + "/dist/";
 app.use(express.static(distDir));
 
+app.get("/", function(req, res) {
+  res.redirect('index.html');
+});
 // Create a database variable outside of the database connection callback to reuse the connection pool in your app.
 var db;
 
@@ -74,24 +79,18 @@ app.get("/api/business", function(req, res) {
   });
 
 /*  "/api/bills"
- *    POST: creates a new bill  
- *    
+ *    POST: creates a new bill
+ *
  */
 
 app.post("/api/bills", function(req, res) {
-  function pad(num, size) {
-        var s = num+"";
-        while (s.length < size) s = "0" + s;
-        return s;
-    }
+
   var newBill = req.body;
-  newBill.pin = pad(Math.floor(Math.random() * 9999).toString(),4);
-  newBill.state = 'pending';
-  db.collection(BillS_COLLECTION).insertOne(newBill, function(err, doc) {
+
+  db.collection(BILLS_COLLECTION).insertOne(newBill, function(err, doc) {
     if (err) {
       handleError(res, err.message, "Failed to create new bill.");
     } else {
-      delete doc.ops[0].pin;
       res.status(201).json(doc.ops[0]);
     }
   });
@@ -102,11 +101,10 @@ app.post("/api/bills", function(req, res) {
  *    PUT: updates bill by id
  */
 app.post("/api/bills/:id", function(req, res) {
-  db.collection(BillS_COLLECTION).findOne({ _id: new ObjectID(req.params.id), pin: req.body.pin }, function(err, doc) {
+  db.collection(BILLS_COLLECTION).findOne({ _id: new ObjectID(req.params.id), pin: req.body.pin }, function(err, doc) {
     if (err) {
       handleError(res, err.message, "Authentication failed.");
     } else {
-        delete doc.ops[0].pin;
         res.status(201).json(doc.ops[0]);
     }
   });
@@ -134,11 +132,11 @@ app.put("/api/bills/:id", function(req, res) {
  */
 
 app.get("/api/bills/lines/:id", function(req, res) {
-  db.collection(BILL_LINES_COLLECTION).findOne({ bill_id: new ObjectID(req.params.id) }, function(err, doc) {
+  db.collection(BILL_LINES_COLLECTION).find({ bill_id: req.params.id }).toArray(function(err, docs) {
     if (err) {
       handleError(res, err.message, "Failed to get bill line");
     } else {
-      res.status(200).json(doc);
+      res.status(200).json(docs);
     }
   });
 });

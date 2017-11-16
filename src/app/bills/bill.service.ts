@@ -8,18 +8,11 @@ import 'rxjs/add/operator/toPromise';
 export class BillService {
 
   private billsUrl = 'api/bills';
-  
+
     constructor(private http: Http) { }
-  
+
     createBill(newBill: Bill): Promise<void | Bill> {
       return this.http.post(this.billsUrl, newBill)
-            .toPromise()
-            .then(response => response.json() as Bill)
-            .catch(this.handleError);
-    }
-
-    authenticatePin(bill_id: string, pin: string): Promise<void | Bill> {
-      return this.http.post(this.billsUrl + '/' + bill_id, pin)
             .toPromise()
             .then(response => response.json() as Bill)
             .catch(this.handleError);
@@ -32,12 +25,12 @@ export class BillService {
                  .then(response => response.json() as Bill)
                  .catch(this.handleError);
     }
-  
-  
+
+
     private handleError (error: any) {
       let errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-      console.error(errMsg); 
+      console.error(errMsg);
     }
 
 }

@@ -4,12 +4,14 @@ import { } from 'googlemaps';
 import { MapsAPILoader } from '@agm/core';
 import { BusinessService } from '../business.service';
 import { Business } from '../business';
+import { UserService } from '../../users/user.service';
+import { User } from '../../users/user';
 
 @Component({
   selector: 'map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css'],
-  providers: [BusinessService]
+  providers: [BusinessService, UserService]
 })
 
 export class MapComponent implements OnInit {
@@ -19,8 +21,12 @@ export class MapComponent implements OnInit {
   public zoom: number;
   public searchControl: FormControl;
   public imgurl: string;
+  public myLat: number;
+  public myLng: number;
 
   business: Business[];
+  users: User[];
+  selectedUser: User;
 
   @ViewChild("search")
   public searchElementRef: ElementRef;
@@ -31,16 +37,24 @@ export class MapComponent implements OnInit {
   constructor(
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone,
-    private businessService: BusinessService
+    private businessService: BusinessService,
+    private userService: UserService
   ) { }
 
-  
+
 
   ngOnInit() {
 
+
+    this.userService
+     .getUsers()
+     .then((users: User[]) => {
+      this.users = users;
+    })
+
     this.businessService
     .getBusiness()
-    .then((Business: Business[]) => { 
+    .then((Business: Business[]) => {
      this.business = Business;
    })
     // Create search FormControl
@@ -79,6 +93,10 @@ export class MapComponent implements OnInit {
         this.zoom = 15;
       });
     }
+  }
+
+  setUSer(user: User) {
+    this.selectedUser = user;
   }
 
 } // Close MapComponent

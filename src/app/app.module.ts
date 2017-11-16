@@ -10,6 +10,7 @@ import { UserListComponent } from './users/user-list/user-list.component';
 import { CurrentBillComponent } from './bills/current-bill/current-bill.component';
 import { BillLineListComponent } from './bill_lines/bill-line-list/bill-line-list.component';
 import { MapComponent } from './business/map/map.component';
+import {LocationStrategy, HashLocationStrategy} from '@angular/common'
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { MapComponent } from './business/map/map.component';
       libraries: ["places"],
     }),
   ],
-  providers: [],
-  bootstrap: [AppComponent, UserListComponent]
+  providers: [{provide: LocationStrategy, useClass: HashLocationStrategy}],
+  bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
