@@ -25,7 +25,7 @@ app.get("/", function(req, res) {
 var db;
 
 // Connect to the database before starting the application server.
-mongodb.MongoClient.connect(config.connectionString, function (err, database) {
+mongodb.MongoClient.connect(process.env.MONGODB_URI, function (err, database) {
   if (err) {
     console.log(err);
     process.exit(1);
@@ -36,7 +36,7 @@ mongodb.MongoClient.connect(config.connectionString, function (err, database) {
   console.log("Database connection ready");
 
   // Initialize the app.
-  var server = app.listen(8080, function () {
+  var server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
   });
